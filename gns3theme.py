@@ -142,22 +142,6 @@ def update_gns3_ui(scheme, src_dir, username, home_dir=None):
 
     return True
 
-
-def cleanup():
-    """
-    Delete old gns3 gui installation.
-    """
-    try:
-        output = subprocess.run(['python3', '-m', 'pip', 'uninstall', 'gns3-gui', '-y'], stderr=subprocess.PIPE)
-    except Exception as err:
-        print(f"\033[91mCleanupError\033[0m: Failed to cleanup, {err}")
-    else:
-        if 'WARNING' in output.stderr.decode('utf-8'):
-            print(f"\033[93mCleanup\033[0m: {output.stderr.decode('utf-8')}")
-        else:
-            print("\033[92mCleanup\033[0m: Removed old gns3_gui installation")
-
-
 def generate_custom_css(data=None):
     """
     Create custom style
@@ -336,14 +320,11 @@ def is_dir_exists(dir_path):
 
 def install_gns3_gui(gns3_gui_dir):
     """
-    Apply changes and install
+    Root check and confirmation
     """
-    # cleanup previous gns3_gui installation
     if not is_root():
         print("\033[91mInstallError\033[0m: Please run as root")
         exit(1)
-    cleanup()
-    cmd = f"cd {gns3_gui_dir}; python3 setup.py install"
     try:
         subprocess.run(['sh', '-c', cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception as err:
