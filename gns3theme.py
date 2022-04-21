@@ -318,17 +318,12 @@ def is_dir_exists(dir_path):
     return False
 
 
-def install_gns3_gui(gns3_gui_dir):
+def root_check():
     """
     Root check and confirmation
     """
     if not is_root():
         print("\033[91mInstallError\033[0m: Please run as root")
-        exit(1)
-    try:
-        subprocess.run(['sh', '-c', cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    except Exception as err:
-        print(f"\033[91mInstall\033[0m: Could not install gns3_gui, {err}")
         exit(1)
     else:
         print("\033[92mInstall\033[0m: Successfully installed gns3_gui")
@@ -373,7 +368,7 @@ def main():
         scheme = schemes[args.color_scheme]
         update_style(scheme)
         update_gns3_ui(scheme, gns3_gui_dir, args.username)
-        install_gns3_gui(gns3_gui_dir)
+        root_check()
     elif args.color_scheme and not args.install_scheme:
         if is_root():
             print("\033[91mInstallError\033[0m: Please run as nonroot")
